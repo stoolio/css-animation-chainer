@@ -1,0 +1,24 @@
+{
+  "name": "css-animation-chainer",
+  "version": "0.5.0",
+  "description": "Chain CSS animations with javascript with keyframes or jQuery",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No testing yet...\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stoolio/css-animation-chainer.git"
+  },
+  "keywords": [
+    "animation",
+    "css",
+    "javascript"
+  ],
+  "author": "Steven Migliorato <smigliorato@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stoolio/css-animation-chainer/issues"
+  },
+  "homepage": "https://github.com/stoolio/css-animation-chainer"
+}

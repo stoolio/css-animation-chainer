@@ -1,0 +1,12 @@
+{
+  "parser": "eslint",
+
+  "env": {
+    "browser": true
+  },
+
+  "rules": {
+    "quotes": [2, "single"],
+    "strict": false,
+  }
+}
