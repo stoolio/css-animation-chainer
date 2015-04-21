@@ -27,7 +27,7 @@ function waitForAllEvents() {
 //Special animation function
 let doAnimation = function() {
 
-  let isLast = !this.reverse ? (this.index >= (this.lastIndex - 1)) : (this.index < 0);
+  let isLast = this._isLast();
 
   let anim = this._getAnim();
 
@@ -46,7 +46,6 @@ let doAnimation = function() {
   }
 
   queueAnimation(function() {
-    console.log('animating: ', propsAnimated.join(', '));
     this.styles.transitionProperty = propsAnimated.join(', ');
     for(var i in anim) {
       this.styles[i] = anim[i];
@@ -76,13 +75,11 @@ let startAnimation = function() {
     this.doAnimation();
   }.bind(this), this.delay);
   this.emergencyTimer = setTimeout(function() {
-    console.log('emergency!!');
     this.onEnd();
   }.bind(this), emergencyThreshold);
 };
 
 let onEnd = function() {
-  console.log('done!');
   clearTimeout(this.emergencyTimer);
   // Just in case there's an issue and the setTimeout calls this function
   this._remove(this.waitForAllEvents);
@@ -201,7 +198,7 @@ Animate.prototype = {
     this.reverse = false;
     this.initialFn = this.initialFn || this.trats;
 
-    this._begin(delay, repeating);
+    this._begin(delay, repeating, cb);
   },
   // originally it was called reverse, but it didn't work.
   // Then I saw it. This is still not a good name.
@@ -213,17 +210,18 @@ Animate.prototype = {
     this.reverse = true;
     this.initialFn = this.initialFn || this.trats;
 
-    this._begin(delay, repeating);
+    this._begin(delay, repeating, cb);
   },
   bounce: function(delay, repeating, cb) {
     if(this.animating){
       return;
     }
 
+    if(cb !== undefined)
     this.cb = this.trats;
     this.initialFn = this.trats;
 
-    this.start(delay, repeating);
+    this.start(delay, repeating, cb);
   },
   stop: function() {
     // Figure out how to gracefully stop and enter code here
@@ -243,10 +241,11 @@ Animate.prototype = {
   _remove: function(cb) {
     this.el.removeEventListener(endEvent, cb);
   },
-  _begin: function(delay, repeating) {
+  _begin: function(delay, repeating, cb) {
     this.animating = true;
     this.delay = delay || this.delay || 0;
     this.repeating = repeating || this.repeating || false;
+    this.cb = cb || this.cb || undefined;
     this.startAnimation();
   },
   _getStyles: function() {
