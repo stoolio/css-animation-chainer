@@ -12,6 +12,8 @@ Also, if I've made any horrible errors below, please let me know.
 
 Currently it requires instantiating an object, but I feel like the future is functional (see the functional-refactor branch).
 
+## Usage
+
 Animations are defined as the arrays of objects (this is not a good animation):
 
 ```
@@ -48,7 +50,7 @@ var animation = [
 
 Do not include `transitionProperties`, those are calculated automatically for you.
 
-The properties will be added to you element, and it will clean up after itself and leave your inline styles pristine.
+The properties will be added to your element, and it will clean up after itself and leave your inline styles pristine.
 
 ```
 var el = document.querySelector('.my-el');
@@ -66,9 +68,9 @@ animation.bounce(); // Play, then Reverse!
 
 The `trats` method, you might notice, is `start` backwards. I had a `reverse` property, so I got creative.
 
-Before I go on, I should mention a few caveats:
+## Info
 
-The following transform properties are supported (that should be all of them). They will not currently be prefixed:
+The following transform properties are supported (that should be all of them). They are not currently prefixed:
 
 * `translateX`
 * `translateY`
@@ -88,7 +90,7 @@ The following transform properties are supported (that should be all of them). T
 * `skewY`
 * `skew`
 
-These 'official' properties don't require units (and will always use `px` or `deg`). There arguments should be passed in as an array, for instance:
+`transform` properties don't require units (and will always use `px` or `deg`). There arguments should be passed in as an array, for instance:
 
 `translate: [15, 15]`
 
@@ -131,7 +133,7 @@ There can be some wierdness when playing an animation backwards because of this.
 
 ## How
 
-`transitionEnd` events are used and required for this to work. They should be properly prefixed.
+`transitionEnd` events are used and required for this to work. They will be properly prefixed to the best of my knowledge.
 
 An emergency timeout is started with the animation. If the animation hasn't finished after it's supposed to, it will fire and clean up. The total animation time is calculated via the `transitionDuration` times.
 
@@ -140,3 +142,7 @@ All styles are added inline in a `requestAnimationFrame` , and it is set up to w
 Animate `opacity` from `0` to `1` over `4s` while `transform: scale` from `0` to `1` for `2s` and then `translate` somewhere for `2s`
 
 and have them run concurrently so they finish at *roughly* the same time.
+
+### Happy Animating!
+
+
