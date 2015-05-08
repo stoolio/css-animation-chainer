@@ -38,7 +38,7 @@ let doAnimation = function() {
     propsAnimated.push(prop);
   }
 
-  // I hate this, but transform will emit a change on any slight change
+  // I hate this, but transform will emit on any slight change
   // but opacity won't
   if(!isLast && anim.opacity === this.styles.opacity ||
      (anim.opacity === 1 && this.styles.opacity === '')) {
