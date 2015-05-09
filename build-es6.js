@@ -1,4 +1,4 @@
-import Animate from './CSSAnimator-no-transitionend';
+import Animate from './css-animation-chainer';
 
 document.addEventListener('DOMContentLoaded', () => {
   let anim = [
@@ -6,30 +6,44 @@ document.addEventListener('DOMContentLoaded', () => {
       transitionDuration: '1s',
       transitionTimingFunction: 'ease-in',
       transform: {
-        translate: [200, 0],
-        scale: [1.5]
+        translate3d: [0, 0, 200],
+        scale: [1]
       },
-      opacity: 0.5
+      zIndex: '2'
     },
     {
       transform: {
-        translate: [200, 200],
-        scale: [2]
+        translate3d: [300, 0, 200],
+        scale: [1]
       },
       opacity: 0.8
     },
     {
       transform: {
-        translate: [0, 200],
-        scale: [1.5]
+        translate3d: [300, 0, 0],
+        scale: [1]
       },
       opacity: 1
     },
     {
       transform: {
-        translate: [0, 0],
+        translate3d: [300, 0, -200],
+        scale: [1]
+      },
+      zIndex: '-1'
+    },
+    {
+      transform: {
+        translate3d: [0, 0, -200],
         scale: [1]
       }
+    },
+    {
+      transform: {
+        translate3d: [0, 0, 0],
+        scale: [1]
+      },
+      zIndex: '1'
     }
   ];
 

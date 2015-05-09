@@ -19,6 +19,7 @@ function makeAnim(anim) {
 var propsAnimated = [];
 
 function waitForAllEvents() {
+  console.log(propsAnimated);
   propsAnimated.pop();
   if(propsAnimated.length === 0) {
     if(typeof this.callbacks[this.index] === 'function') {
@@ -36,7 +37,9 @@ let doAnimation = function() {
   let anim = this._getAnim();
 
   for(var prop in anim) {
-    if(prop.includes('transition')) {
+    // HACK: we will have to filter out all non-animatable props
+    // or, not support them
+    if(prop.includes('transition|zIndex')) {
       continue;
     }
     propsAnimated.push(prop);
@@ -79,6 +82,7 @@ let startAnimation = function() {
     this.doAnimation();
   }.bind(this), this.delay);
   this.emergencyTimer = setTimeout(function() {
+    console.log('EMERGENCY!!');
     this.onEnd();
   }.bind(this), emergencyThreshold);
 };
@@ -147,47 +151,35 @@ function Animate(el, opts) {
   this.callbacks = [];
   this.totalDuration = 0;
 
-  let lastAnimProps = {
-    transitionDuration: this.originalStyles.transitionDuration,
-    transitionTimingFunction: this.originalStyles.transitionTimingFunction
-  };
+  let lastDuration = this.originalStyles.transitionDuration;
 
   this.anims = opts.map(function(anim, index) {
-    var processedAnim;
-    if(anim.transform && typeof anim.transform !== 'string') {
-      anim.transform = makeAnim(anim.transform);
+  var processedAnim;
+  if(anim.transform && typeof anim.transform !== 'string') {
+    anim.transform = makeAnim(anim.transform);
+  }
+
+  anim.transitionDuration = anim.transitionDuration || lastDuration;
+
+  lastDuration = anim.transitionDuration;
+
+  this.totalDuration += parseInt(anim.transitionDuration) * 1000;
+
+  for(var i in anim) {
+    if(i === 'callback') {
+      this.callbacks[index] = processedAnim[i];
+      delete processedAnim[i];
+      continue;
     }
-    // This monstrosity supports carrying over stats
-    // For instance, enter one transitionDuration, and
-    // it will be used for all steps
-    processedAnim = {
-      transitionDuration: anim.transitionDuration || lastAnimProps.transitionDuration,
-      transitionTimingFunction: anim.transitionTimingFunction || lastAnimProps.transitionTimingFunction
-    };
-    if(anim.opacity !== undefined) {
-      processedAnim.opacity = anim.opacity;
+    if(i.includes('transition')) {
+      i = 'transition';
     }
-    if(anim.transform !== undefined) {
-      processedAnim.transform = anim.transform;
+    if(this.allChanged.indexOf(i) === -1) {
+      this.allChanged.push(i);
     }
-    lastAnimProps.transitionDuration = processedAnim.transitionDuration;
-    lastAnimProps.transitionTimingFunction = processedAnim.transitionTimingFunction;
-    this.totalDuration += parseInt(processedAnim.transitionDuration) * 1000;
-    for(var i in processedAnim) {
-      if(i === 'callback') {
-        this.callbacks[index] = processedAnim[i];
-        delete processedAnim[i];
-        continue;
-      }
-      if(i.includes('transition')) {
-        i = 'transition';
-      }
-      if(this.allChanged.indexOf(i) === -1) {
-        this.allChanged.push(i);
-      }
-    }
-    return processedAnim;
-  }.bind(this));
+  }
+  return anim;
+}.bind(this));
 
   this.lastIndex = this.anims.length;
 }
@@ -199,7 +191,7 @@ Animate.prototype = {
     }
 
     this.reverse = false;
-    this.initialFn = this.initialFn || this.trats;
+    this.initialFn = this.initialFn || this.start;
 
     this._begin(delay, repeating, cb);
   },
@@ -220,7 +212,6 @@ Animate.prototype = {
       return;
     }
 
-    if(cb !== undefined)
     this.cb = this.trats;
     this.initialFn = this.trats;
 

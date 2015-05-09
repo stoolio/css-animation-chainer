@@ -4,22 +4,42 @@
   <title>CSS Animation Chainer</title>
   <script src="build.js"></script>
   <style type="text/css">
+  body * {
+    box-sizing: border-box;
+  }
+
   .container {
     margin: 0 auto;
     padding-top: 50px;
+    perspective: 1000px;
     width: 50%;
   }
 
   .block {
+    border: 2px solid black;
     width: 100px;
     height: 100px;
+    float: left;
+    transform-style: preserve-3d;
+  }
+
+  .block:nth-child(1) {
     background-color: red;
-    position: absolute;
+  }
+
+  .block:nth-child(2) {
+    background-color: green;
+  }
+
+  .block:nth-child(3) {
+    background-color: blue;
   }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="block"></div>
+    <div class="block"></div>
     <div class="block"></div>
   </div>
 </body>
