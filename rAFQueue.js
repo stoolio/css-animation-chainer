@@ -4,7 +4,7 @@ let token = false;
 
 function noop() {}
 
-rAF = (function(w) {
+let rAF = (function(w) {
   return  w.requestAnimationFrame ||
           w.webkitRequestAnimationFrame ||
           w.mozRequestAnimationFrame ||

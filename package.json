@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/stoolio/css-animation-chainer/issues"
   },
-  "homepage": "https://github.com/stoolio/css-animation-chainer"
+  "homepage": "https://github.com/stoolio/css-animation-chainer",
+  "devDependencies": {
+    "babelify": "^6.0.2",
+    "watchify": "^3.2.1"
+  }
 }

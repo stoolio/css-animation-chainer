@@ -1,6 +1,12 @@
 import endEvent from './transition-end-event';
 import queueAnimation from './rAFQueue';
-import t from './transformHelpers';
+import t from './transform-helpers';
+
+if (String.prototype.includes === undefined) {
+  String.prototype.includes = function (check) {
+    return this.search(check) !== -1;
+  }
+}
 
 function makeAnim(anim) {
   let data = [], i;
@@ -13,10 +19,8 @@ function makeAnim(anim) {
 var propsAnimated = [];
 
 function waitForAllEvents() {
-  console.log(propsAnimated);
   propsAnimated.pop();
   if(propsAnimated.length === 0) {
-    console.log('let\'s do this');
     if(typeof this.callbacks[this.index] === 'function') {
       this.callbacks[this.index].call(this);
     }
@@ -185,7 +189,6 @@ function Animate(el, opts) {
     return processedAnim;
   }.bind(this));
 
-  console.log('duration: ', this.totalDuration);
   this.lastIndex = this.anims.length;
 }
 
